@@ -1,0 +1,126 @@
+{
+  "Contacts": [
+    {
+      "name": "Rajesh",
+      "lastName": "Facebook",
+      "email": "raj1@gmail.com",
+      "type": "Facebook"
+    },
+    {
+      "name": "Raj",
+      "lastName": "Facebook",
+      "email": "raj2@gmail.com",
+      "type": "Facebook"
+    },
+    {
+      "name": "Raje",
+      "lastName": "Facebook",
+      "email": "raj3@gmail.com",
+      "type": "Facebook"
+    },
+    {
+      "name": "Raju",
+      "lastName": "EmailK",
+      "email": "raj4@gmail.com",
+      "type": "Email"
+    },
+    {
+      "name": "Rakesh",
+      "lastName": "Email",
+      "email": "raj5@gmail.com",
+      "type": "Email"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Email",
+      "email": "raj6@gmail.com",
+      "type": "Email"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Email",
+      "email": "raj6@gmail.com",
+      "type": "Email"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Email",
+      "email": "raj6@gmail.com",
+      "type": "Email"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Instagram",
+      "email": "raj6@gmail.com",
+      "type": "Instagram"
+    },
+    {
+      "name": "Rake",
+      "lastName": "Instagram",
+      "email": "raj6@gmail.com",
+      "type": "Instagram"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Instagram",
+      "email": "raj6@gmail.com",
+      "type": "Instagram"
+    },
+    {
+      "name": "Rake K",
+      "lastName": "Instagram",
+      "email": "raj6@gmail.com",
+      "type": "Instagram"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Group A",
+      "type": "Group",
+      "contacts": [
+        {
+          "name": "Appleseed",
+          "type": "Contact",
+          "number": "1234",
+          "email_id": ""
+        },
+        {
+          "name": "Group A1",
+          "type": "Group",
+          "contacts": [
+            {
+              "name": "Steve",
+              "type": "Contact",
+              "number": "1234",
+              "email_id": ""
+            }
+          ]
+        }
+      ]
+    },
+     {
+     "name": "Group B",
+     "type": "Group",
+     "contacts": [
+                  {
+                  "name": "Appleseed B",
+                  "type": "Contact",
+                  "number": "123456",
+                  "email_id": ""
+                  },
+                  {
+                  "name": "Group B1",
+                  "type": "Group",
+                  "contacts": [
+                               {
+                               "name": "Steve",
+                               "type": "Contact",
+                               "number": "123456",
+                               "email_id": ""
+                               }
+                               ]
+                  }
+                  ]
+     }
+  ]
+}
