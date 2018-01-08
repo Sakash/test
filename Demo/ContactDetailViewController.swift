@@ -9,7 +9,7 @@
 import UIKit
 
 class ContactDetailViewController: UIViewController {
-    var contactInfoDict = [String: String]()
+    var contactInfoDict : ContactViewModel!
 
     @IBOutlet weak var nameLabel : UILabel!
     @IBOutlet weak var phoneLabel : UILabel!
@@ -17,18 +17,9 @@ class ContactDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-        
-        if let name = contactInfoDict["name"], let lastName = contactInfoDict["lastName"]
-        {
-            nameLabel.text = "\(name) \(lastName)"
-        }
-        
-        if let email = contactInfoDict["email"]
-        {
-            phoneLabel.text = "\(email)"
-        }
+        nameLabel.text = "\(contactInfoDict.name) \(contactInfoDict.lastName)"
+        phoneLabel.text = "\(contactInfoDict.email)"
     }
 
     override func didReceiveMemoryWarning() {

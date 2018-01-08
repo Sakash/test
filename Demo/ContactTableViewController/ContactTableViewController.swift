@@ -12,50 +12,40 @@ let mainScreenSize = UIScreen.main.bounds.size
 
 class ContactTableViewController: UITableViewController {
 
-    var contactArray : NSMutableArray = NSMutableArray()
-    var groupArray : NSMutableArray = NSMutableArray()
     var expandIndex = NSIndexPath() // Variable to control reloading of section/rows
+    var contactViewModel = [ContactViewModel]()
+    var groupViewModel = [GroupViewModel]()
+
+    var groupContactViewModelBase = GroupContactViewModelBase()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         expandIndex = NSIndexPath(item: -1, section: 2)
+        
+        groupContactViewModelBase.callContactToGetData { (response) in
+            debugPrint(response)
+            
+            for item in response
+            {
+                self.contactViewModel.append(item)
+            }
+        }
+        groupContactViewModelBase.callGroupToGetData { (response) in
+            debugPrint(response)
+            
+            for item in response
+            {
+                self.groupViewModel.append(item)
+            }
+        }
+        
+        self.tableView.reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        if let path = Bundle.main.path(forResource: "contact", ofType: "json")
-        {
-            if let jsonData = NSData(contentsOfFile: path)
-            {
-                do{
-                    if let jsonResult: NSDictionary = try JSONSerialization.jsonObject(with: jsonData as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
-                    {
-                        contactArray.addObjects(from: jsonResult.value(forKey: "Contacts") as! [Any])
-                        
-                        groupArray.addObjects(from: jsonResult.value(forKey: "groups") as! [Any])
-                        
-                        for var groupInfo in groupArray {
-                            if var arr : NSArray = (groupInfo as AnyObject).value(forKey: "contacts") as? NSArray, arr.count > 0
-                            {
-                                let tempDict = groupInfo as! NSDictionary
-                                tempDict.setValue("yes", forKey: "isExpandable")
-                                tempDict.setValue("no", forKey: "isExpanded")
-                                groupInfo = tempDict
-                                
-                                arr = self.modifyingGroupArray(arr: &arr)
-                            }
-                        }
-                        self.tableView.reloadData()
-                    }
-                }
-                catch
-                {
-                    print(error)
-                }
-            }
-        }
+        self.tableView.reloadData()
     }
     
     // Method: To Modify Group Array to keep bool variables like isExpandable,isExpanded
@@ -85,15 +75,15 @@ class ContactTableViewController: UITableViewController {
     // MARK: - Table view data source & delegate methods
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if (contactArray.count > 0 && groupArray.count > 0)
+        if (contactViewModel.count > 0 && groupViewModel.count > 0)
         {
-            return 2 + groupArray.count
+            return 2 + groupViewModel.count
         }
-        else if contactArray.count > 0  {
+        else if contactViewModel.count > 0  {
             return 1
         }
-        else if groupArray.count > 0  {
-            return 1 + groupArray.count
+        else if groupViewModel.count > 0  {
+            return 1 + groupViewModel.count
         }
         else{
             return 0
@@ -119,9 +109,8 @@ class ContactTableViewController: UITableViewController {
         case 1:
             headerLabel.text = "Groups"
         default:
-            let groupInfoDict = groupArray[section - 2] as! NSDictionary
-            let name = groupInfoDict.value(forKey: "name")
-            headerLabel.text = name as? String
+            let groupInfoDict = groupViewModel[section - 2]
+            headerLabel.text = groupInfoDict.name
             headerLabel.tag = section - 2
            
             headerLabel.frame = CGRect(x:30, y:5, width:mainScreenSize.width - 30, height:21)
@@ -152,15 +141,15 @@ class ContactTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return contactArray.count
+            return contactViewModel.count
         case 1:
             return 0
         default:
             var rowCount = 0
             if (expandIndex.row != -1 && expandIndex.section == section)
             {
-                let groupInfoDict = groupArray[expandIndex.row] as! NSDictionary
-                rowCount = ((groupInfoDict.value(forKey: "contacts") as? NSArray)?.count)!
+                let groupInfoDict = groupViewModel[expandIndex.row]
+                rowCount = groupInfoDict.contact.count
             }
             return rowCount
         }
@@ -172,17 +161,10 @@ class ContactTableViewController: UITableViewController {
         {
             let cell :  ContactTableViewCell = tableView.dequeueReusableCell(withIdentifier: "contactReuseIdentifier", for: indexPath) as! ContactTableViewCell
             
-            let contactInfoDict = contactArray[indexPath.row] as! NSDictionary
+            let contactInfo = contactViewModel[indexPath.row]
             
-            if let name = contactInfoDict.value(forKey: "name"), let lastName = contactInfoDict.value(forKey: "lastName")
-            {
-                cell.nameLabel.text = "\(name) \(lastName)"
-            }
-            
-            if let email = contactInfoDict.value(forKey: "email")
-            {
-                cell.phoneLabel.text = "\(email)"
-            }
+            cell.nameLabel.text = "\(contactInfo.name) \(contactInfo.lastName)"
+            cell.phoneLabel.text = contactInfo.email
             
             return cell
         }
@@ -192,15 +174,9 @@ class ContactTableViewController: UITableViewController {
             
             if (expandIndex.row != -1)
             {
-                if let arr : NSArray = (groupArray[expandIndex.row] as AnyObject).value(forKey: "contacts") as? NSArray, arr.count > 0
-                {
-                    if let name = (arr[indexPath.row] as AnyObject).value(forKey: "name")
-                    {
-                        cell.groupNameLabel.text = "\(name)"
-                    }
-                }
+                let arr : Contact = groupViewModel[expandIndex.row].contact[indexPath.row] as! Contact
+                cell.groupNameLabel.text = arr.name
             }
-            
             return cell
         }
     }
@@ -213,9 +189,9 @@ class ContactTableViewController: UITableViewController {
         }
         else if (expandIndex.row != -1 && expandIndex.section == indexPath.section)
         {
-            let groupInfoDict = groupArray[expandIndex.row] as! NSDictionary
+            let groupInfoDict = groupViewModel[expandIndex.row]
 
-            if let isExpandable :String = groupInfoDict.value(forKey: "isExpandable") as? String ,isExpandable == "yes"
+            if let isExpandable :String = groupInfoDict.isExpandable ,isExpandable == "yes"
             {
                 // Insert Further rows
                 
@@ -226,30 +202,42 @@ class ContactTableViewController: UITableViewController {
     
     // Method: Tap Gesture recogniser
     func reloadRowsAtSection(tap : CustomTapGestureRecognizer)  {
-        
-        if expandIndex.section != tap.tag && expandIndex.row != -1
+       
+        if expandIndex.section - 2 == tap.tag && expandIndex.row != -1
         {
             expandIndex = NSIndexPath(item: -1, section: expandIndex.section)
-            let groupInfoDict = groupArray[expandIndex.section - 2] as! NSDictionary
-            groupInfoDict.setValue("no", forKey: "isExpanded")
+            let groupInfoDict = groupViewModel[expandIndex.section - 2]
+            groupInfoDict.isExpanded = "no"
            
+            let indices: IndexSet = [expandIndex.section]
+            self.tableView.reloadSections(indices, with: UITableViewRowAnimation.fade)
+            
+            return
+        }
+        
+        if expandIndex.row != -1
+        {
+            expandIndex = NSIndexPath(item: -1, section: expandIndex.section)
+            let groupInfoDict = groupViewModel[expandIndex.section - 2]
+            groupInfoDict.isExpanded = "no"
+            
             let indices: IndexSet = [expandIndex.section]
             self.tableView.reloadSections(indices, with: UITableViewRowAnimation.fade)
         }
         
-        let groupInfoDict = groupArray[tap.tag] as! NSDictionary
+        let groupInfoDict = groupViewModel[tap.tag]
         
-        if let isExpandable :String = groupInfoDict.value(forKey: "isExpandable") as? String ,isExpandable == "yes"
+        if groupInfoDict.isExpandable == "yes"
         {
-            if let isExpanded :String = groupInfoDict.value(forKey: "isExpanded") as? String ,isExpanded == "no"
+            if groupInfoDict.isExpanded == "no"
             {
                 expandIndex = NSIndexPath(item: tap.tag, section: tap.tag + 2)
-                groupInfoDict.setValue("yes", forKey: "isExpanded")
+                groupInfoDict.isExpanded = "yes"
             }
             else
             {
                 expandIndex = NSIndexPath(item: -1, section: tap.tag + 2)
-                groupInfoDict.setValue("no", forKey: "isExpanded")
+                groupInfoDict.isExpanded = "no"
             }
             let indices: IndexSet = [tap.tag + 2]
             self.tableView.reloadSections(indices, with: UITableViewRowAnimation.fade)
@@ -263,7 +251,7 @@ class ContactTableViewController: UITableViewController {
             if let indexPath = tableView.indexPathForSelectedRow
             {
                 let vc = segue.destination as! ContactDetailViewController
-                vc.contactInfoDict = contactArray[indexPath.row] as! [String: String]
+                vc.contactInfoDict = contactViewModel[indexPath.row]
             }
         }
     }

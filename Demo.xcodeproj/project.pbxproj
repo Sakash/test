@@ -17,6 +17,9 @@
 		8C07C5EB1FF272FE0049F5A0 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C07C5EA1FF272FE0049F5A0 /* GroupTableViewCell.swift */; };
 		B8B51A051FF2A39C00536036 /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B51A041FF2A39C00536036 /* ContactDetailViewController.swift */; };
 		B8D23AAD1FF374DF00EC284C /* CustomTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D23AAC1FF374DF00EC284C /* CustomTapGestureRecognizer.swift */; };
+		B8D23AB21FFBB32C00EC284C /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D23AB11FFBB32C00EC284C /* Contact.swift */; };
+		B8D23AB41FFBF98000EC284C /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D23AB31FFBF98000EC284C /* Group.swift */; };
+		B8D23AB61FFD3E7500EC284C /* GroupContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D23AB51FFD3E7500EC284C /* GroupContactViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		8C07C5EA1FF272FE0049F5A0 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		B8B51A041FF2A39C00536036 /* ContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
 		B8D23AAC1FF374DF00EC284C /* CustomTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTapGestureRecognizer.swift; sourceTree = "<group>"; };
+		B8D23AB11FFBB32C00EC284C /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		B8D23AB31FFBF98000EC284C /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		B8D23AB51FFD3E7500EC284C /* GroupContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupContactViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,15 +71,16 @@
 			isa = PBXGroup;
 			children = (
 				8C07C5E71FF272B70049F5A0 /* TableViewCell Classes */,
+				B8D23AB01FFBB31000EC284C /* Models */,
 				8C07C5E21FF26B780049F5A0 /* JSON */,
 				8C07C5C91FF268350049F5A0 /* AppDelegate.swift */,
-				8C07C5E51FF26E4E0049F5A0 /* ContactTableViewController.swift */,
+				B8D23AB71FFDF9FF00EC284C /* ContactTableViewController */,
 				B8B51A041FF2A39C00536036 /* ContactDetailViewController.swift */,
+				B8D23AAC1FF374DF00EC284C /* CustomTapGestureRecognizer.swift */,
 				8C07C5CD1FF268350049F5A0 /* Main.storyboard */,
 				8C07C5D01FF268350049F5A0 /* Assets.xcassets */,
 				8C07C5D21FF268350049F5A0 /* LaunchScreen.storyboard */,
 				8C07C5D51FF268350049F5A0 /* Info.plist */,
-				B8D23AAC1FF374DF00EC284C /* CustomTapGestureRecognizer.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -93,6 +100,24 @@
 				8C07C5EA1FF272FE0049F5A0 /* GroupTableViewCell.swift */,
 			);
 			path = "TableViewCell Classes";
+			sourceTree = "<group>";
+		};
+		B8D23AB01FFBB31000EC284C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B8D23AB11FFBB32C00EC284C /* Contact.swift */,
+				B8D23AB31FFBF98000EC284C /* Group.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B8D23AB71FFDF9FF00EC284C /* ContactTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8C07C5E51FF26E4E0049F5A0 /* ContactTableViewController.swift */,
+				B8D23AB51FFD3E7500EC284C /* GroupContactViewModel.swift */,
+			);
+			path = ContactTableViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,10 +195,13 @@
 			files = (
 				B8D23AAD1FF374DF00EC284C /* CustomTapGestureRecognizer.swift in Sources */,
 				8C07C5E91FF272EB0049F5A0 /* ContactTableViewCell.swift in Sources */,
+				B8D23AB61FFD3E7500EC284C /* GroupContactViewModel.swift in Sources */,
 				B8B51A051FF2A39C00536036 /* ContactDetailViewController.swift in Sources */,
+				B8D23AB41FFBF98000EC284C /* Group.swift in Sources */,
 				8C07C5CA1FF268350049F5A0 /* AppDelegate.swift in Sources */,
 				8C07C5E61FF26E4E0049F5A0 /* ContactTableViewController.swift in Sources */,
 				8C07C5EB1FF272FE0049F5A0 /* GroupTableViewCell.swift in Sources */,
+				B8D23AB21FFBB32C00EC284C /* Contact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +327,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -320,10 +348,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = demo.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
